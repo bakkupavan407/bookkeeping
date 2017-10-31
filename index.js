@@ -4,8 +4,8 @@ var pbks = express();
 var routes = require("./routes/routes");
 
 /*pbks server running port*/
-pbks.listen(process.env.PORT || 3000, function() {
-    console.log("Server listening on port 3000");
+pbks.listen(process.env.PORT || 4000, function() {
+    console.log("Server listening on port 4000");
 });
 
 /*iniating routes*/
