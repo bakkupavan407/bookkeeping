@@ -1,6 +1,7 @@
 var bodyParser = require("body-parser");
 var auth = require("./auth");
 var ledgers = require("../src/ledgers/ledgers");
+var groups = require("../src/groups/groups");
 
 module.exports = {
 
@@ -24,8 +25,11 @@ module.exports = {
         app.post("/login", auth.login);
         app.post("/register", auth.register);
 
-        // ledgers listing
+        // ledgers save, delete, update and read
         app.post("/api/v1/saveledger", ledgers.saveledgers);
+
+        // groups read
+        app.get("/api/v1/getgroups", groups.getgroups);
 
         // dummy services
         app.get("/", function(req, res) {
