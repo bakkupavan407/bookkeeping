@@ -10,7 +10,7 @@
 var mongojs = require('mongojs');
 var connectionString = "mongodb://127.0.0.1:27017/"; // "username:password@example.com/mydb"
 var database = "pbks";
-var collections = ["users"];
+var collections = ["users","ledgers"];
 
 var restDbConnStr = "mongodb://pbks:pbks@ds241395.mlab.com:41395/pbks";
 

@@ -1,7 +1,6 @@
 var bodyParser = require("body-parser");
 var auth = require("./auth");
-var user = require("../src/user/user");
-var admin = require("../src/admin/admin");
+var ledgers = require("../src/ledgers/ledgers");
 
 module.exports = {
 
@@ -19,30 +18,18 @@ module.exports = {
             next();
         });
 
-        // app.all('/api/v1/*', [require('../middleware/validateRequest')]);
+        app.all('/api/v1/*', [require('../middleware/validateRequest')]);
 
         // user login registration
         app.post("/login", auth.login);
         app.post("/register", auth.register);
 
+        // ledgers listing
+        app.post("/api/v1/saveledger", ledgers.saveledgers);
+
         // dummy services
         app.get("/", function(req, res) {
             res.send("Welcomes you my dear!!");
         });
-        // app.get("/getname", function(req, res) {
-        //     res.send("PowerStar");
-        // });
-        // app.get("/naresh", user.sampleuser);
-        // app.get("/fapps", user.fapps);
-
-        // validating emailid
-        // app.post("/api/user/emailvalidate", user.emailvalidate);
-
-        // user management services
-        // app.post("/api/user/saveuser", user.saveuser);
-        // app.post("/api/user/loginuser", user.loginuser);
-
-        // admin routes
-        // app.post("/api/admin/savedepts", admin.savedepts);
     }
 }
