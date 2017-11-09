@@ -2,9 +2,13 @@ var jwt = require('jwt-simple');
 var validateUser = require('../routes/auth').validateUser;
 
 module.exports = function(req, res, next) {
-    var token = (req.body && req.body.access_token) || (req.query && req.query.access_token) || req.headers['x-access-token'];
-    var key = (req.body && req.body.x_key) || (req.query && req.query.x_key) || req.headers['x-key'];
-    var uid = (req.body && req.body.uid) || req.headers['x-uid'];
+    // var token = (req.body && req.body.access_token) || (req.query && req.query.access_token) || req.headers['x-access-token'];
+    // var key = (req.body && req.body.x_key) || (req.query && req.query.x_key) || req.headers['x-key'];
+    // var uid = (req.body && req.body.uid) || req.headers['x-uid'];
+
+    var token = req.headers['x-access-token'];
+    var key = req.headers['x-key'];
+    var uid = req.headers['x-uid'];
 
     if (token || key) {
         try {
@@ -21,7 +25,17 @@ module.exports = function(req, res, next) {
             }
 
             validateUser(uid).then(function(result) {
-                if (result) next();
+                if (result) {
+                    req.sessionuid = uid;
+                    next();
+                } else {
+                    res.status(401);
+                    res.json({
+                        "status": 401,
+                        "message": "Invalid User"
+                    });
+                    return;
+                }
             }).catch(function(err) {
                 res.status(401);
                 res.json({

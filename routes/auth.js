@@ -26,6 +26,7 @@ var auth = {
             if (!userdata) {
                 res.json(utils.response("failure", { "errmsg": "Something wrong with input data!" }));
             } else {
+                userdata.timestamp = new Date().toISOString();
                 db.users.insert(userdata, function(err, result) {
                     if (err) res.json(utils.response("failure", { "errmsg": err }));
 

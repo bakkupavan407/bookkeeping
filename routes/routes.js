@@ -27,6 +27,7 @@ module.exports = {
 
         // ledgers save, delete, update and read
         app.post("/api/v1/saveledger", ledgers.saveledgers);
+        app.delete("/api/v1/deleteledgers", ledgers.deleteledgers);
 
         // groups read
         app.get("/api/v1/getgroups", groups.getgroups);
