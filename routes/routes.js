@@ -26,6 +26,7 @@ module.exports = {
         app.post("/register", auth.register);
 
         // ledgers save, delete, update and read
+        app.get("/api/v1/getledgers", ledgers.getledgers);
         app.post("/api/v1/saveledger", ledgers.saveledgers);
         app.delete("/api/v1/deleteledgers", ledgers.deleteledgers);
 

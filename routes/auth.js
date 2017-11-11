@@ -55,7 +55,7 @@ var auth = {
 
 // to generate token and set expire time.
 function getToken() {
-    var expires = expiresIn(7); // 7 days
+    var expires = expiresIn(0.333333); // 7 days
     var token = jwt.encode({
         exp: expires
     }, require('../config/secret')());

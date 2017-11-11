@@ -5,7 +5,14 @@ var utils = require("../../utils/response");
 
 var ledgers = {
 	getledgers: function(req, res) {
-		
+		try {
+			db.ledgers.find().toArray(function (err, result) {
+				if(err) res.json(utils.response("failure", {"errmsg": err}));
+				res.json(utils.response("success", result));
+			});
+		} catch(err) {
+			res.json(utils.response("failure", {"errmsg": err}));
+		}
 	},
 	saveledgers: function(req, res){
 		try {
