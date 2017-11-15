@@ -21,7 +21,7 @@ module.exports = {
         	return reobj = {
                 status: "failure",
                 statusCode: 500,
-                message:  (data && data.errmsg) || "Something wrong with input data or server connection!"
+                message:  data.cmsg || (data && data.message) || "Something wrong with input data or server connection!"
             }
         }
     }

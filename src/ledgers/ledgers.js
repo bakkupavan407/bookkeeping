@@ -6,7 +6,8 @@ var utils = require("../../utils/response");
 var ledgers = {
 	getledgers: function(req, res) {
 		try {
-			db.ledgers.find().toArray(function (err, result) {
+			var userid = req.sessionuid;
+			db.ledgers.find({userid: userid}).toArray(function (err, result) {
 				if(err) res.json(utils.response("failure", {"errmsg": err}));
 				res.json(utils.response("success", result));
 			});
@@ -20,6 +21,8 @@ var ledgers = {
 	      if(!ledger){
 	        res.json(utils.response("failure", {"errmsg": "Something wrong with input data!"}));
 	      } else {
+					ledger.userid = req.sessionuid;
+					ledger.timestamp = new Date();
 	        db.ledgers.insert(ledger, function (err, result) {
 	          if(err) res.json(utils.response("failure", {"errmsg": err}));
 
@@ -30,24 +33,33 @@ var ledgers = {
 	      res.json(utils.response("failure", {"errmsg": err}));
 	    }
 	},
+	updateledgers: function(req, res){
+		try {
+			var ledger = req.body;
+			var ledgerid = ledger.ledgerid;
+			var ledger_id = new mongo.ObjectID(ledgerid);
+			var userid = req.sessionuid;
+			var gquery = {"_id": ledger_id, "userid": userid};
+
+			delete ledger.ledgerid;
+			db.ledgers.update(gquery, {$set: ledger}, function(err, result){
+				if(err) res.json(utils.response("failure", {"errmsg": err}));
+				res.json(utils.response("success", result));
+			});
+		} catch (err) {
+			res.json(utils.response("failure", {"errmsg": err}));
+		}
+	},
 	deleteledgers: function(req, res) {
 		try{
-			var uid = req.body.uid;
-			var o_id = new mongo.ObjectID(uid);
-			var gquery = { "_id": o_id };
-			var sessionid = req.sessionuid;
+			var ledgerid = req.body.ledgerid;
+			var ledger_id = new mongo.ObjectID(ledgerid);
+			var userid = req.sessionuid;
+			var gquery = { "_id": ledger_id, "userid": userid};
 
-			db.ledgers.find(gquery, function(err, result) {
-					if (err) res.json(utils.response("failure", { "errmsg": err }));
-					var data = result[0];
-					if(data && data.uid === sessionid) {
-						db.ledgers.remove(gquery, function(err, obj) {
-							if (err) throw err;
-							res.json(utils.response("success"));
-						});
-					} else {
-						res.json(utils.response("failure", {errmsg: "You can only delete your own data."}));
-					}
+			db.ledgers.remove(gquery, function(err, obj) {
+				if (err) throw err;
+				res.json(utils.response("success"));
 			});
 		} catch (err) {
 			res.json(utils.response("failure", {"errmsg": err && err.message}));
