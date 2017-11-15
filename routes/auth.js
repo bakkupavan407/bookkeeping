@@ -26,13 +26,17 @@ var auth = {
             if (!userdata) {
                 res.json(utils.response("failure", { "errmsg": "Something wrong with input data!" }));
             } else {
+                userdata.userid = "";
+                userdata.role = "user";
                 userdata.timestamp = new Date().toISOString();
                 db.users.insert(userdata, function(err, result) {
                     if (err) res.json(utils.response("failure", { "errmsg": err }));
 
-                    var tokenInfo = getToken();
-                    result.token = tokenInfo.token;
-                    result.expires = tokenInfo.expires;
+                    // var tokenInfo = getToken();
+                    // result.token = tokenInfo.token;
+                    // result.expires = tokenInfo.expires;
+
+                    delete result.password;
 
                     res.json(utils.response("success", result));
                 });
